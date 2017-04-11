@@ -1,0 +1,2 @@
+---
+nginx_installation_types_using_service: ["packages", "configuration-only"]

@@ -1,0 +1,17 @@
+---
+nginx_installation_type: "packages"
+nginx_binary_name: "nginx"
+nginx_service_name: "{{nginx_binary_name}}"
+nginx_conf_dir: "{% if ansible_os_family == 'FreeBSD' %}/usr/local/etc/nginx{% else %}/etc/nginx{% endif %}"
+
+nginx_user: "{% if ansible_os_family == 'RedHat' or ansible_os_family == 'Suse' %}nginx{% elif ansible_os_family == 'Debian' %}www-data{% elif ansible_os_family == 'FreeBSD' %}www{% endif %}"
+nginx_group: "{{nginx_user}}"
+
+nginx_extra_root_params: []
+nginx_events_params:
+  - worker_connections {% if nginx_max_clients is defined %}{{nginx_max_clients}}{% else %}512{% endif %}
+
+nginx_sites: []
+nginx_remove_sites: []
+
+nginx_daemon_mode: "on"

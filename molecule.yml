@@ -1,0 +1,43 @@
+---
+dependency:
+  name: galaxy
+  requirements_file: tests/requirements.yml
+
+driver:
+  name: docker
+docker:
+  containers:
+    - name: ansible-role-nginx-vhosts-1404
+      image: ubuntu
+      image_version: 14.04
+      volume_mounts:
+        - ${MOLECULE_APTPROXY_PATH}:/etc/apt/apt.conf.d/00aptproxy
+
+    - name: ansible-role-nginx-vhosts-1604
+      image: ubuntu
+      image_version: 16.04
+      volume_mounts:
+        - ${MOLECULE_APTPROXY_PATH}:/etc/apt/apt.conf.d/00aptproxy
+
+#    - name: ansible-role-nginx-vhosts-1604
+#      image: popstas/ansible-server-base
+#      image_version: latest
+#      volume_mounts:
+#        - ${MOLECULE_APTPROXY_PATH}:/etc/apt/apt.conf.d/00aptproxy
+
+ansible:
+  playbook: tests/playbook.yml
+  group_vars:
+    all:
+      nginx_sites:
+        foo:
+          - listen 8080
+          - server_name localhost
+          - root "/tmp/site1"
+          - location / { try_files $uri $uri/ /index.html; }
+          - location /images/ { try_files $uri $uri/ /index.html; }
+        bar:
+          template: tests/custom_bar.conf.j2
+          server_name: foo.example.com
+      nginx_remove_sites:
+        - baz
