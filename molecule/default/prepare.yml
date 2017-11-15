@@ -1,5 +1,7 @@
 ---
-- hosts: all
+- name: Prepare
+  hosts: all
+  gather_facts: True
   roles:
     - name: jdauphant.nginx
       nginx_sites:
@@ -8,4 +10,3 @@
           - server_name _
           - root "{% if ansible_os_family == 'FreeBSD' %}/usr/local/www/nginx-dist{% else %}/usr/share/nginx/html{% endif %}"
           - index index.html
-    - ansible-role-nginx-vhosts
