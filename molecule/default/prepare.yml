@@ -2,13 +2,14 @@
 - name: Prepare
   hosts: all
   gather_facts: True
-  roles:
+  tasks:
     - name: apt-proxy
       copy:
         content: "Acquire::http::Proxy \"{{ lookup('env', 'APT_PROXY') }}\"; Acquire::https::Proxy \"false\";"
         dest: /etc/apt/apt.conf.d/01proxy
       failed_when: False
 
+  roles:
     - name: jdauphant.nginx
       nginx_sites:
         default:
